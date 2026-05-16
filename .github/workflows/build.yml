@@ -1,11 +1,11 @@
-name: Unity Build
+name: ProtoBot Build
 
 on:
   workflow_dispatch:
 
 jobs:
   build-windows:
-    name: Build Windows
+    name: ProtoBot Windows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -30,7 +30,7 @@ jobs:
         with:
           targetPlatform: StandaloneWindows64
           unityVersion: 2021.3.45f2
-          buildName: "Protobot Rebuilt"
+          buildName: "ProtoBot Rebuilt"
 
       - name: Install NSIS
         run: sudo apt-get install -y nsis
@@ -41,5 +41,71 @@ jobs:
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
-          name: ProtobotRebuilt-Installer
-          path: ProtobotRebuilt-Installer.exe
+          name: ProtoBotRebuilt-Installer
+          path: ProtoBotRebuilt-Installer.exe
+
+  build-macos:
+    name: ProtoBot macOS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-macOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-macOS-
+
+      - name: Build Unity Project
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneOSX
+          unityVersion: 2021.3.45f2
+          buildName: "ProtoBot Rebuilt"
+
+      - name: Upload macOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build-macOS-app
+          path: build/StandaloneOSX
+
+  package-macos-dmg:
+    name: ProtoBot macOS DMG
+    runs-on: macos-latest
+    needs: build-macos
+    steps:
+      - name: Download macOS Build
+        uses: actions/download-artifact@v4
+        with:
+          name: Build-macOS-app
+          path: build/StandaloneOSX
+
+      - name: Create DMG
+        run: |
+          TEMP_DIR=$(mktemp -d)
+          cp -r "build/StandaloneOSX/ProtoBot Rebuilt.app" "$TEMP_DIR/"
+          ln -s /Applications "$TEMP_DIR/Applications"
+
+          hdiutil create \
+            -volname "ProtoBot Rebuilt" \
+            -srcfolder "$TEMP_DIR" \
+            -ov \
+            -format UDZO \
+            "ProtoBotRebuilt.dmg"
+
+          rm -rf "$TEMP_DIR"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: ProtoBotRebuilt-macOS-DMG
+          path: ProtoBotRebuilt.dmg

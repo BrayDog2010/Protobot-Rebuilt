@@ -1,10 +1,14 @@
 !include "MUI2.nsh"
 
-; ── App Info ────────────────────────────────────────────────────────────────
-Name "Protobot Rebuilt"
-OutFile "ProtobotRebuilt-Installer.exe"
-InstallDir "$PROGRAMFILES64\Protobot Rebuilt"
-InstallDirRegKey HKLM "Software\Protobot Rebuilt" "InstallDir"
+; ── Compression ──────────────────────────────────────────────────────────────
+SetCompressor /SOLID lzma
+SetCompressorDictSize 64
+
+; ── App Info ──────────────────────────────────────────────────────────────────
+Name "ProtoBot Rebuilt"
+OutFile "ProtoBotRebuilt-Installer.exe"
+InstallDir "$PROGRAMFILES64\ProtoBot Rebuilt"
+InstallDirRegKey HKLM "Software\ProtoBot Rebuilt" "InstallDir"
 RequestExecutionLevel admin
 
 ; ── UI ──────────────────────────────────────────────────────────────────────
@@ -28,31 +32,31 @@ Section "Install"
   File /r "build\StandaloneWindows64\*"
 
   ; Start menu shortcut
-  CreateDirectory "$SMPROGRAMS\Protobot Rebuilt"
-  CreateShortcut "$SMPROGRAMS\Protobot Rebuilt\Protobot Rebuilt.lnk" "$INSTDIR\Protobot Rebuilt.exe"
+  CreateDirectory "$SMPROGRAMS\ProtoBot Rebuilt"
+  CreateShortcut "$SMPROGRAMS\ProtoBot Rebuilt\ProtoBot Rebuilt.lnk" "$INSTDIR\ProtoBot Rebuilt.exe"
 
   ; Desktop shortcut
-  CreateShortcut "$DESKTOP\Protobot Rebuilt.lnk" "$INSTDIR\Protobot Rebuilt.exe"
+  CreateShortcut "$DESKTOP\ProtoBot Rebuilt.lnk" "$INSTDIR\ProtoBot Rebuilt.exe"
 
   ; Write uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ; Add to Windows Add/Remove Programs
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "DisplayName" "Protobot Rebuilt"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "UninstallString" "$INSTDIR\Uninstall.exe"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "DisplayIcon" "$INSTDIR\Protobot Rebuilt.exe"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "Publisher" "YourName"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt" "DisplayVersion" "1.0.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayName" "ProtoBot Rebuilt"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayIcon" "$INSTDIR\ProtoBot Rebuilt.exe"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "Publisher" "ProtoBot Rebuilt"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayVersion" "1.0.0"
 SectionEnd
 
 ; ── Uninstall ────────────────────────────────────────────────────────────────
 Section "Uninstall"
   RMDir /r "$INSTDIR"
 
-  Delete "$DESKTOP\Protobot Rebuilt.lnk"
-  RMDir /r "$SMPROGRAMS\Protobot Rebuilt"
+  Delete "$DESKTOP\ProtoBot Rebuilt.lnk"
+  RMDir /r "$SMPROGRAMS\ProtoBot Rebuilt"
 
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Protobot Rebuilt"
-  DeleteRegKey HKLM "Software\Protobot Rebuilt"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt"
+  DeleteRegKey HKLM "Software\ProtoBot Rebuilt"
 SectionEnd
