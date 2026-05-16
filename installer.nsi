@@ -9,8 +9,8 @@ RequestExecutionLevel admin
 
 ; ── UI ──────────────────────────────────────────────────────────────────────
 !define MUI_ABORTWARNING
-!define MUI_ICON "icon.ico"           ; your game icon
-!define MUI_UNICON "icon.ico"
+!define MUI_ICON "Assets\Sprites\Logos\AppIcon.ico"           ; your game icon
+!define MUI_UNICON "Assets\Sprites\Logos\AppIcon.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
