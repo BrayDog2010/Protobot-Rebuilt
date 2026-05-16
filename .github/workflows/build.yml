@@ -94,11 +94,6 @@ jobs:
         with:
           name: Build-macOS-app
 
-      - name: Apply Icon to App Bundle
-        run: |
-          cp "Assets/Sprites/Logos/AppIcon.icns" "build/StandaloneOSX/ProtoBot Rebuilt.app/Contents/Resources/AppIcon.icns"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile AppIcon" "build/StandaloneOSX/ProtoBot Rebuilt.app/Contents/Info.plist"
-
       - name: Create DMG
         run: |
           TEMP_DIR=$(mktemp -d)
