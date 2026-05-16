@@ -1,12 +1,7 @@
 name: Unity Build
 
 on:
-  push:
-    branches:
-      - main # or your main branch
-  pull_request:
-    branches:
-      - main # or your main branch
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -22,7 +17,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-Windows-${{ github.sha }}
+          key: Library-Windows-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-Windows-
 
@@ -34,10 +29,17 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneWindows64
-          unityVersion: 2021.3.5f1
+          unityVersion: 2021.3.45f2
+          buildName: "Protobot Rebuilt"
 
-      - name: Upload Build Artifacts
+      - name: Install NSIS
+        run: sudo apt-get install -y nsis
+
+      - name: Create NSIS Installer
+        run: makensis installer.nsi
+
+      - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
-          name: Build-StandaloneWindows64
-          path: build/StandaloneWindows64
+          name: ProtobotRebuilt-Installer
+          path: ProtobotRebuilt-Installer.exe
