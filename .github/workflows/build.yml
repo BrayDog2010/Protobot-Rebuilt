@@ -45,7 +45,7 @@ jobs:
           path: ProtoBotRebuilt-Installer.exe
 
   build-macos:
-    name: ProtoBot macOS
+    name: ProtoBot MacOS
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -89,6 +89,16 @@ jobs:
           name: Build-macOS-app
           path: build/StandaloneOSX
 
+      - name: Delete macOS Build Artifact
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: Build-macOS-app
+
+      - name: Apply Icon to App Bundle
+        run: |
+          cp "Assets/Sprites/Logos/AppIcon.icns" "build/StandaloneOSX/ProtoBot Rebuilt.app/Contents/Resources/AppIcon.icns"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile AppIcon" "build/StandaloneOSX/ProtoBot Rebuilt.app/Contents/Info.plist"
+
       - name: Create DMG
         run: |
           TEMP_DIR=$(mktemp -d)
@@ -99,7 +109,8 @@ jobs:
             -volname "ProtoBot Rebuilt" \
             -srcfolder "$TEMP_DIR" \
             -ov \
-            -format UDZO \
+            -format UDBZ \
+            -imagekey bzip2-level=9 \
             "ProtoBotRebuilt.dmg"
 
           rm -rf "$TEMP_DIR"
