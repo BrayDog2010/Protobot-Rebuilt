@@ -7,8 +7,17 @@ using UnityEngine.InputSystem;
 
 public class ColorPicker : Selector
 {
-    public override event Action<ISelection> setEvent;
-    public override event Action clearEvent;
+    private Action<ISelection> setEventHandler;
+    public override event Action<ISelection> setEvent
+    {
+        add { setEventHandler += value; }
+        remove { setEventHandler -= value; }
+    }
+    public override event Action clearEvent
+    {
+        add { }
+        remove { }
+    }
 
     [SerializeField] private MouseCast mouseCast;
     [SerializeField] private InputEvent input;
@@ -24,7 +33,7 @@ public class ColorPicker : Selector
     private void OnPerformInput()
     {
         if (!Keyboard.current.ctrlKey.isPressed || colorPickerKeybind.Contains("Ctrl"))
-        { 
+        {
             if (ColorTool.CustomColor)
             {
                 if (!MouseInput.overUI)
@@ -60,9 +69,10 @@ public class ColorPicker : Selector
                         {
                             if (component == null)
                                 return;
-                            if (component.material.GetFloat("_Metallic") == .754f)
+                            if (RendererColorUtility.IsMetallicSelectable(component))
                             {
-                                ColorTool.Material = component.material;
+                                ColorTool.Material = component.sharedMaterial;
+                                ColorTool.ColorToSet = RendererColorUtility.GetTintColor(component);
                                 colorToolGameObject.UpdateColorSliders();
                             }
                         }
