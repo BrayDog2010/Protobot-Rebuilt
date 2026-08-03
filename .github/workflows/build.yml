@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           lfs: true
 
       - name: Cache Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-Windows-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -39,7 +39,7 @@ jobs:
         run: makensis installer.nsi
 
       - name: Upload Installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ProtoBotRebuilt-Installer
           path: ProtoBotRebuilt-Installer.exe
@@ -49,12 +49,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           lfs: true
 
       - name: Cache Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-macOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -62,7 +62,7 @@ jobs:
             Library-macOS-
 
       - name: Build Unity Project
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v5.0.0
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -73,7 +73,7 @@ jobs:
           buildName: "ProtoBot Rebuilt"
 
       - name: Upload macOS Build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Build-macOS-app
           path: build/StandaloneOSX
@@ -84,13 +84,13 @@ jobs:
     needs: build-macos
     steps:
       - name: Download macOS Build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: Build-macOS-app
           path: build/StandaloneOSX
 
       - name: Delete macOS Build Artifact
-        uses: geekyeggo/delete-artifact@v5
+        uses: geekyeggo/delete-artifact@v6
         with:
           name: Build-macOS-app
 
@@ -111,7 +111,7 @@ jobs:
           rm -rf "$TEMP_DIR"
 
       - name: Upload DMG
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ProtoBotRebuilt-macOS-DMG
           path: ProtoBotRebuilt.dmg
