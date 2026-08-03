@@ -11,6 +11,9 @@
 /[Uu]ser[Ss]ettings/
 /[Ii]nstaller[Oo]utput/
 LocalBuild/
+/[Ww]eb/
+.claude/
+/[Mm]odels/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

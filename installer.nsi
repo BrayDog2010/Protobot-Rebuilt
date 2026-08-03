@@ -31,6 +31,11 @@ Section "Install"
   SetOutPath "$INSTDIR"
   File /r "build\StandaloneWindows64\*"
 
+  ; Models folder for saved builds; grant Users write access so the app
+  ; can save there without running as admin (S-1-5-32-545 = BUILTIN\Users)
+  CreateDirectory "$INSTDIR\Models"
+  nsExec::ExecToLog 'icacls "$INSTDIR\Models" /grant *S-1-5-32-545:(OI)(CI)M'
+
   ; Start menu shortcut
   CreateDirectory "$SMPROGRAMS\ProtoBot Rebuilt"
   CreateShortcut "$SMPROGRAMS\ProtoBot Rebuilt\ProtoBot Rebuilt.lnk" "$INSTDIR\ProtoBot Rebuilt.exe"
@@ -47,7 +52,7 @@ Section "Install"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayIcon" "$INSTDIR\ProtoBot Rebuilt.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "Publisher" "ProtoBot Rebuilt"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayVersion" "1.0.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ProtoBot Rebuilt" "DisplayVersion" "1.3.7"
 SectionEnd
 
 ; ── Uninstall ────────────────────────────────────────────────────────────────
