@@ -32,7 +32,7 @@ public class ColorPicker : Selector
     //TODO: make this good and all that jazz
     private void OnPerformInput()
     {
-        if (!Keyboard.current.ctrlKey.isPressed || colorPickerKeybind.Contains("Ctrl"))
+        if (!Protobot.InputEvents.RebindAction.PrimaryModifierPressed || colorPickerKeybind.Contains("Ctrl"))
         {
             if (ColorTool.CustomColor)
             {
